@@ -1090,6 +1090,9 @@ window.GAON_CONFIG = {
   SUBMIT_ENDPOINT: "https://script.google.com/macros/s/AKfycbzy12Jyy0KdXUeOzhc9MCDJQdvFEQfd3omRkDhc5P5v1gDW0PZBZeq3IY6N1FqnGPw/exec",
   // Apps Script는 "text/plain"이어야 CORS 사전요청 없이 받을 수 있어요. 자체 API면 "application/json" 가능.
   SUBMIT_CONTENT_TYPE: "text/plain;charset=utf-8",
+  // A/B 테스트 출신 표시 — 통합 시트의 'AB출신' 열에 그대로 기록돼요 (A 사이트="A", B 사이트="B")
+  PROJECT: "potato_test",
+  AB_VARIANT: "A",
   SUBMIT_TIMEOUT_MS: 15000,
 
   /* ── 개인정보 처리 안내 (확정 전에는 비워두세요 → 실제 제출 비활성화) ── */
@@ -2862,6 +2865,8 @@ var CHAR = (function () {
     var utm = {};
     if (C.CAPTURE_UTM) new URLSearchParams((window.__GAON_NAV && window.__GAON_NAV.search) || window.location.search).forEach(function (v, k) { if (/^utm_/i.test(k)) utm[k.toLowerCase()] = v.slice(0, 100); });
     return {
+      project: C.PROJECT || 'potato_test',
+      ab_variant: C.AB_VARIANT || '',
       submission_id: (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
       submitted_at: new Date().toISOString(),
       name: $('#name').value.trim(),
